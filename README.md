@@ -1,4 +1,4 @@
-# Full HA AWS Infrastructure — Terraform Modules
+# High Availability AWS Infrastructure with Terraform
 
 A production-grade, multi-tier, multi-AZ High Availability AWS infrastructure built with reusable Terraform modules.
 
