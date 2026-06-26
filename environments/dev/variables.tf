@@ -73,10 +73,7 @@ variable "db_username" {
   default = "admin"
 }
 
-variable "db_password" {
-  type      = string
-  sensitive = true
-}
+
 
 variable "hosted_zone_id" {
   description = "Route 53 hosted zone ID for skylumanex.click"

@@ -48,11 +48,6 @@ variable "db_username" {
   type        = string
 }
 
-variable "db_password" {
-  description = "The password for the database"
-  type        = string
-  sensitive   = true
-}
 
 variable "multi_az" {
   description = "Whether to create a Multi-AZ database instance"
