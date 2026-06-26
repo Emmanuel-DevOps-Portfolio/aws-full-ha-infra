@@ -58,7 +58,7 @@ resource "aws_db_instance" "this" {
 
   skip_final_snapshot       = false
   final_snapshot_identifier = "${var.project_name}-db-final-snapshot"
-  deletion_protection       = false
+  deletion_protection       = true
 
   tags = {
     Name = "${var.project_name}-db"
