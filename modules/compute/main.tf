@@ -36,12 +36,12 @@ resource "aws_security_group" "app" {
     security_groups = [aws_security_group.alb.id]
   }
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  #ingress {
+    #from_port   = 22
+    #to_port     = 22
+    #protocol    = "tcp"
+    #cidr_blocks = ["0.0.0.0/0"]
+  #}
 
   egress {
     from_port   = 0
@@ -56,6 +56,38 @@ resource "aws_security_group" "app" {
 }
 
 # LAUNCH TEMPLATE
+
+# IAM Role for EC2 SSM Access
+resource "aws_iam_role" "ec2_ssm_role" {
+  name = "${var.project_name}-ec2-ssm-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name = "${var.project_name}-ec2-ssm-role"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_policy" {
+  role       = aws_iam_role.ec2_ssm_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "ec2_profile" {
+  name = "${var.project_name}-ec2-profile"
+  role = aws_iam_role.ec2_ssm_role.name
+}
 
 # 1. Fetch the latest Amazon Linux 2023 AMI
 data "aws_ami" "amazon_linux" {
@@ -79,10 +111,15 @@ resource "aws_launch_template" "app_template" {
   description   = "Launch template for standard application servers"
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
-  key_name      = var.key_pair_name # Ensure this key pair exists in AWS
+  #key_name      = var.key_pair_name # Ensure this key pair exists in AWS
 
-  # Network and Security Settings
+   # Network and Security Settings
   vpc_security_group_ids = [aws_security_group.app.id] # Replace with your SG ID
+
+  # IAM Instance Profile for SSM access
+  iam_instance_profile {
+    name = aws_iam_instance_profile.ec2_profile.name
+  }
 
   # Storage Configuration (Root Volume Override)
   block_device_mappings {
