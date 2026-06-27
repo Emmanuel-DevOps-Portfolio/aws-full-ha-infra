@@ -22,9 +22,6 @@ variable "instance_type" {
   default = "t3.micro"
 }
 
-variable "key_pair_name" {
-  type = string
-}
 
 variable "asg_min_size" {
   type    = number
@@ -50,3 +47,15 @@ variable "cpu_low_threshold" {
   type    = number
   default = 20
 }
+
+variable "hosted_zone_id" {
+  description = "Route 53 hosted zone ID for certificate DNS validation"
+  type        = string
+}
+
+variable "domain_name" {
+  description = "Domain name for the ACM certificate"
+  type        = string
+  default     = "app.skylumanex.click"
+}
+

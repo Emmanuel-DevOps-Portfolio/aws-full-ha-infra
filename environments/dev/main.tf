@@ -17,7 +17,10 @@ module "compute" {
   public_subnet_ids      = module.networking.public_subnet_ids
   private_app_subnet_ids = module.networking.private_app_subnet_ids
   instance_type          = var.instance_type
-  key_pair_name          = var.key_pair_name
+  domain_name            = var.domain_name
+  hosted_zone_id         = var.hosted_zone_id
+  
+ 
 }
 
 module "database" {

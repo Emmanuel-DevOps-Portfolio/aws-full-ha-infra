@@ -73,9 +73,13 @@ variable "db_username" {
   default = "admin"
 }
 
-
-
 variable "hosted_zone_id" {
   description = "Route 53 hosted zone ID for skylumanex.click"
   type        = string
+}
+
+variable "domain_name" {
+  description = "Domain name for the ACM certificate"
+  type        = string
+  default     = "app.skylumanex.click"
 }
